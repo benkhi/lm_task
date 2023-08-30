@@ -1,0 +1,57 @@
+2023-08-30 12:44:28 INFO     INITIALIZE GRID SEARCHER: 12 configs to try
+2023-08-30 12:44:28 INFO     ## 1st RUN: Configuration 0/12 ##
+2023-08-30 12:44:28 INFO     skip as the config exists at ['lmqg_output/t5-base-squad-qag/model_mrcdvc'] 
+{'dataset_path': 'lmqg/qag_squad', 'dataset_name': 'default', 'input_types': ['paragraph'], 'output_types': ['questions_answers'], 'model': 't5-base', 'fp16': False, 'batch': 8, 'epoch': 15, 'max_length': 512, 'max_length_output': 256, 'prefix_types': ['qag'], 'lr': 0.0001, 'label_smoothing': 0.15, 'random_seed': 1, 'gradient_accumulation_steps': 16}
+2023-08-30 12:44:28 INFO     initialize model trainer
+2023-08-30 12:44:28 INFO     load config from existing checkpoint at lmqg_output/t5-base-squad-qag/model_mrcdvc
+2023-08-30 12:44:28 INFO     hyperparameters
+2023-08-30 12:44:28 INFO     	 * dataset_path: lmqg/qag_squad
+2023-08-30 12:44:28 INFO     	 * dataset_name: default
+2023-08-30 12:44:28 INFO     	 * input_types: ['paragraph']
+2023-08-30 12:44:28 INFO     	 * output_types: ['questions_answers']
+2023-08-30 12:44:28 INFO     	 * prefix_types: ['qag']
+2023-08-30 12:44:28 INFO     	 * model: t5-base
+2023-08-30 12:44:28 INFO     	 * max_length: 512
+2023-08-30 12:44:28 INFO     	 * max_length_output: 256
+2023-08-30 12:44:28 INFO     	 * epoch: 15
+2023-08-30 12:44:28 INFO     	 * batch: 8
+2023-08-30 12:44:28 INFO     	 * lr: 0.0001
+2023-08-30 12:44:28 INFO     	 * fp16: False
+2023-08-30 12:44:28 INFO     	 * random_seed: 1
+2023-08-30 12:44:28 INFO     	 * gradient_accumulation_steps: 16
+2023-08-30 12:44:28 INFO     	 * label_smoothing: 0.15
+2023-08-30 12:44:28 INFO     initialize checkpoint with t5-base
+/home/dalyasin/miniconda3/envs/lmqg/lib/python3.8/site-packages/transformers/tokenization_utils_base.py:1714: FutureWarning: The `use_auth_token` argument is deprecated and will be removed in v5 of Transformers.
+  warnings.warn(
+/home/dalyasin/miniconda3/envs/lmqg/lib/python3.8/site-packages/transformers/models/t5/tokenization_t5_fast.py:155: FutureWarning: This tokenizer was incorrectly instantiated with a model max length of 512 which will be corrected in Transformers v5.
+For now, this behavior is kept to avoid breaking backwards compatibility when padding/encoding with `truncation is True`.
+- Be aware that you SHOULD NOT rely on t5-base automatically truncating your input to 512 when padding/encoding.
+- If you want to encode/pad to sequences longer than 512 you can either instantiate this tokenizer with `model_max_length` or pass `max_length` when encoding/padding.
+- To avoid this warning, please instantiate this tokenizer with `model_max_length` set to your preferred value.
+  warnings.warn(
+2023-08-30 12:44:30 INFO     Created a temporary directory at /tmp/tmp74n7pz8x
+2023-08-30 12:44:30 INFO     Writing /tmp/tmp74n7pz8x/_remote_module_non_scriptable.py
+/home/dalyasin/miniconda3/envs/lmqg/lib/python3.8/site-packages/transformers/modeling_utils.py:2193: FutureWarning: The `use_auth_token` argument is deprecated and will be removed in v5 of Transformers.
+  warnings.warn(
+2023-08-30 12:44:39 INFO     use spaCy answer extraction model: positionrank
+2023-08-30 12:44:47 INFO     Model `t5-base`
+2023-08-30 12:44:47 INFO     	 * Num of GPU in use: 2
+2023-08-30 12:44:47 INFO     	 * Prefix: True
+2023-08-30 12:44:47 INFO     	 * Language: en (ignore at the training phase)
+2023-08-30 12:44:47 INFO     dataset preprocessing
+/home/dalyasin/miniconda3/envs/lmqg/lib/python3.8/site-packages/datasets/load.py:2072: FutureWarning: 'use_auth_token' was deprecated in favor of 'token' in version 2.14.0 and will be removed in 3.0.0.
+You can remove this warning by passing 'token=False' instead.
+  warnings.warn(
+2023-08-30 12:44:51 INFO     loading preprocessed feature from /home/dalyasin/.cache/lmqg/encoded_featurelmqg/qag_squad/t5-base.512.256.paragraph.questions_answers.train.qag.pkl
+2023-08-30 12:44:55 INFO     start model training
+/home/dalyasin/miniconda3/envs/lmqg/lib/python3.8/site-packages/torch/nn/parallel/_functions.py:68: UserWarning: Was asked to gather along dimension 0, but all input tensors were scalars; will instead unsqueeze and return a vector.
+  warnings.warn('Was asked to gather along dimension 0, but all '
+2023-08-30 12:50:46 INFO     	 * (global step 50: loss: 0.748827863484621, lr: 0.0001
+2023-08-30 12:56:31 INFO     	 * (global step 100: loss: 0.6133665852248669, lr: 0.0001
+2023-08-30 12:59:33 INFO     [epoch 0/15] average loss: 1.145, lr: 0.0001
+2023-08-30 12:59:33 INFO     saving model related files
+2023-08-30 12:59:33 INFO     saving model
+2023-08-30 12:59:34 INFO     saving tokenizer
+2023-08-30 12:59:34 INFO     saving optimizer
+2023-08-30 12:59:37 INFO     remove old optimizer files
+2023-08-30 13:02:22 INFO     	 * (global step 150: loss: 0.579295078292489, lr: 0.0001

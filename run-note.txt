@@ -1,0 +1,31 @@
+
+
+
+P1******************
+nohup sh fine-tune.sh >> t5-large_output_fine-tune.out 2>&1 &
+nohup sh eval.sh >> t5-large_output_eval_model.out 2>&1 & 
+
+
+
+P2******************
+sh fine-tune.sh 2>&1 | tee New_t5-base_output_fine-tune.out
+sh eval.sh 2>&1 | tee t5-base_output_eval_model.out
+
+nohup sh fine-tune.sh >> t5-base_output_fine-tune.out 2>&1 &
+nohup sh eval.sh >> t5-base_output_eval_model.out 2>&1 & 
+
+
+lmqg-train-search -c "tmp_ckpt_t5-base" -d "lmqg/qg_squad" -m "t5-base" -b 64 --epoch-partial 5 -e 15 --language "en" --n-max-config 1 \
+  -g 2 4 --lr 1e-04 5e-04 1e-03 --label-smoothing 0 0.15
+
+P3******************
+nohup sh fine-tune.sh >> bart-large_output_fine-tune.out 2>&1 &
+nohup sh eval.sh >> bart-large_output_eval_model.out 2>&1 & 
+
+
+
+P4******************
+nohup sh fine-tune.sh 2>&1 | tee t5-small_output_fine-tune.out 2>&1 &
+nohup sh eval.sh 2>&1 | tee t5-small_output_eval_model.out 2>&1 & 
+
+
