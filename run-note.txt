@@ -1,0 +1,111 @@
+
+
+
+P1******************
+nohup sh fine-tune.sh >> t5-large_output_fine-tune.out 2>&1 &
+nohup sh eval.sh >> t5-large_output_eval_model.out 2>&1 & 
+
+
+
+P2******************
+sh fine-tune.sh 2>&1 | tee t5-base_output_fine-tune.out
+sh eval.sh 2>&1 | tee t5-base_output_eval_model.out
+
+nohup sh fine-tune.sh >> t5-base_output_fine-tune.out 2>&1 &
+nohup sh eval.sh >> t5-base_output_eval_model.out 2>&1 & 
+
+sh all_run.sh 2>&1 | tee test_all_run_output.out
+python evaluation_squad.py 2>&1 | tee evaluation_squad.out
+
+
+
+P3******************
+nohup sh fine-tune.sh >> bart-large_output_fine-tune.out 2>&1 &
+nohup sh eval.sh >> bart-large_output_eval_model.out 2>&1 & 
+
+
+
+P4******************
+nohup sh fine-tune.sh 2>&1 | tee t5-small_output_fine-tune.out 2>&1 &
+nohup sh eval.sh 2>&1 | tee t5-small_output_eval_model.out 2>&1 & 
+
+######################################################################################################
+
+lmqg-train-search -d "lmqg/qg_squadshifts" -m "t5-small" -b 32 -g 2 4 -c "lmqg_squadshifts_output/t5-small-squadshifts-qag" -i 'paragraph' -o 'questions_answers' -p 'qag' --epoch-partial 10 -e 15 --max-length-output-eval 256 --max-length-output 256
+lmqg-train-search -d "lmqg/qg_squadshifts", 'all' -m "t5-base"  -b 8 -g 8 16 -c "lmqg_squadshifts_output/t5-base-squadshifts-qag" -i 'paragraph' -o 'questions_answers' -p 'qag' --epoch-partial 10 -e 15 --max-length-output-eval 256 --max-length-output 256
+
+lmqg-eval -m "lmqg_squadshifts_output/t5-small-squadshifts-qag/best_model" -e "lmqg_squadshifts_output/t5-small-squadshifts-qag/best_model/eval" --language "en" -d "lmqg/qag_squad" -i "paragraph" -o 'questions_answers' --max-length-output 256 --max-length 256
+lmqg-eval -m "lmqg_squadshifts_output/t5-base-squadshifts-qag/best_model" -e "lmqg_squadshifts_output/t5-base-squadshifts-qag/best_model/eval" --language "en" -d "lmqg/qag_squad" -i "paragraph" -o 'questions_answers' --max-length-output 256 --max-length 256
+
+lmqg-push-to-hf -m "lmqg_squadshifts_output/t5-small-squadshifts-qag/best_model" -a "t5-small-squadshifts-qag" -o "lmqg"
+lmqg-push-to-hf -m "lmqg_squadshifts_output/t5-base-squadshifts-qag/best_model" -a "t5-base-squadshifts-qag" -o "lmqg"
+
+######################################################################################################
+
+lmqg-eval -m "lmqg/t5-large-squad-qg" -e "./eval_metrics" -d "lmqg/qg_squad" -l "en"
+
+######################################################################################################
+
+#lmqg-train-search -c "tmp_ckpt" -d "lmqg/qag_squad" -m "t5-base" -b 64 --epoch-partial 5 -e 15 --language "en" --n-max-config 1 \
+#  -g 2 4 --lr 1e-04 5e-04 1e-03 --label-smoothing 0 0.15
+lmqg-train-search -c "tmp_ckpt_t5-base_RACE" -d "lmqg/qg_squad" -m "t5-base" -b 64 --epoch-partial 5 -e 15 --language "en" --n-max-config 1 \
+  -g 2 4 --lr 1e-04 5e-04 1e-03 --label-smoothing 0 0.15
+
+#lmqg-train-search -d "lmqg/qag_squad" -m "t5-base"  -b 8 -g 8 16 -c "lmqg_output/t5-base-squad-qag" -i 'paragraph' -o 'questions_answers' -p 'qag' --epoch-partial 10 -e 15 --max-length-output-eval 256 --max-length-output 256
+#lmqg-eval -m "lmqg_output/t5-base-squad-qag/best_model" -e "lmqg_output/t5-base-squad-qag/best_model/eval" --language "en" -d "lmqg/qag_squad" -i "paragraph" -o 'questions_answers' --max-length-output 256 --max-length 256
+#lmqg-push-to-hf -m "lmqg_output/t5-base-squad-qag/best_model" -a "t5-base-squad-qag" -o "lmqg"
+
+######################################################################################################
+
+#lmqg-train-search -c "tmp_ckpt" -d "lmqg/qag_squad" -m "t5-base" -b 64 --epoch-partial 5 -e 15 --language "en" --n-max-config 1 \
+#  -g 2 4 --lr 1e-04 5e-04 1e-03 --label-smoothing 0 0.15
+
+# e2e
+
+
+###########################################
+lmqg-train-search -d "lmqg/qag_squad" -m "t5-small" -b 32 -g 2 4 -c "lmqg_output/t5-small-squad-qag" -i 'paragraph' -o 'questions_answers' -p 'qag' --epoch-partial 10 -e 15 --max-length-output-eval 256 --max-length-output 256
+lmqg-eval -m "lmqg_output/t5-small-squad-qag/best_model" -e "lmqg_output/t5-small-squad-qag/best_model/eval" --language "en" -d "lmqg/qag_squad" -i "paragraph" -o 'questions_answers' --max-length-output 256 --max-length 256
+lmqg-push-to-hf -m "lmqg_output/t5-small-squad-qag/best_model" -a "t5-small-squad-qag" -o "lmqg"
+
+lmqg-train-search -d "lmqg/qag_squad" -m "t5-base"  -b 8 -g 8 16 -c "lmqg_output/t5-base-squad-qag" -i 'paragraph' -o 'questions_answers' -p 'qag' --epoch-partial 10 -e 15 --max-length-output-eval 256 --max-length-output 256
+lmqg-eval -m "lmqg_output/t5-base-squad-qag/best_model" -e "lmqg_output/t5-base-squad-qag/best_model/eval" --language "en" -d "lmqg/qag_squad" -i "paragraph" -o 'questions_answers' --max-length-output 256 --max-length 256
+lmqg-push-to-hf -m "lmqg_output/t5-base-squad-qag/best_model" -a "t5-base-squad-qag" -o "lmqg"
+
+lmqg-train-search -d "lmqg/qag_squad" -m "t5-large" -b 16 -g 4 8 -c "lmqg_output/t5-large-squad-qag" -i 'paragraph' -o 'questions_answers' -p 'qag' --n-max-config 2 --epoch-partial 5 -e 15 --max-length-output-eval 256 --max-length-output 256
+lmqg-eval -m "lmqg_output/t5-large-squad-qag/best_model" -e "lmqg_output/t5-large-squad-qag/best_model/eval" --language "en" -d "lmqg/qag_squad" -i "paragraph" -o 'questions_answers' --max-length-output 256 --max-length 256
+lmqg-push-to-hf -m "lmqg_output/t5-large-squad-qag/best_model" -a "t5-large-squad-qag" -o "lmqg"
+
+lmqg-train-search -d "lmqg/qag_squad" -m "facebook/bart-large" -b 8 -g 8 16 -c "lmqg_output/bart-large-squad-qag" -i 'paragraph' -o 'questions_answers' --epoch-partial 10 -e 15 --max-length-output-eval 256 --max-length-output 256
+lmqg-eval -m "lmqg_output/bart-large-squad-qag/best_model" -e "lmqg_output/bart-large-squad-qag/best_model/eval" --language "en" -d "lmqg/qag_squad" -i "paragraph" -o 'questions_answers' --max-length-output 256 --max-length 256
+lmqg-push-to-hf -m "lmqg_output/bart-large-squad-qag/best_model" -a "bart-large-squad-qag" -o "lmqg"
+
+#############################################
+####T5-large flan
+lmqg-train-search -d "lmqg/qag_squad" -m "google/flan-t5-large" -b 2 -g 32 64 -c "lmqg_output/flan-t5-large-squad-qag" -i 'paragraph' -o 'questions_answers' -p 'qag' --n-max-config 2 --epoch-partial 5 -e 15 --max-length-output-eval 256 --max-length-output 256
+lmqg-eval -m "lmqg_output/flan-t5-large-squad-qag/best_model" -e "lmqg_output/flan-t5-large-squad-qag/best_model/eval" --language "en" -d "lmqg/qag_squad" -i "paragraph" -o 'questions_answers' --max-length-output 256 --max-length 256
+lmqg-push-to-hf -m "lmqg_output/flan-t5-large-squad-qag/best_model" -a "flan-t5-large-squad-qag" -o "lmqg"
+
+####T5-base
+lmqg-train-search -d "lmqg/qag_squad" -m "google/flan-t5-base"  -b 8 -g 8 16 -c "lmqg_output/flan-t5-base-squad-qag" -i 'paragraph' -o 'questions_answers' -p 'qag' --epoch-partial 10 -e 15 --max-length-output-eval 256 --max-length-output 256
+lmqg-eval -m "lmqg_output/flan-t5-base-squad-qag/best_model" -e "lmqg_output/flan-t5-base-squad-qag/best_model/eval" --language "en" -d "lmqg/qag_squad" -i "paragraph" -o 'questions_answers' --max-length-output 256 --max-length 256
+lmqg-push-to-hf -m "lmqg_output/flan-t5-base-squad-qag/best_model" -a "flan-t5-base-squad-qag" -o "lmqg"
+
+####T5-small 
+lmqg-train-search -d "lmqg/qag_squad" -m "google/flan-t5-small" -b 16 -g 4 8 -c "lmqg_output/flan-t5-small-squad-qag" -i 'paragraph' -o 'questions_answers' -p 'qag' --epoch-partial 10 -e 15 --max-length-output-eval 256 --max-length-output 256
+lmqg-eval -m "lmqg_output/flan-t5-small-squad-qag/best_model" -e "lmqg_output/flan-t5-small-squad-qag/best_model/eval" --language "en" -d "lmqg/qag_squad" -i "paragraph" -o 'questions_answers' --max-length-output 256 --max-length 256
+lmqg-push-to-hf -m "lmqg_output/flan-t5-small-squad-qag/best_model" -a "flan-t5-small-squad-qag" -o "lmqg"
+
+
+
+
+
+#lmqg-train-search -d "lmqg/qag_squad" -m "t5-base"  -b 8 -g 8 16 -c "lmqg_output/t5-base-squad-qag" -i 'paragraph' -o 'questions_answers' -p 'qag' --epoch-partial 10 -e 15 --max-length-output-eval 256 --max-length-output 256
+#lmqg-eval -m "lmqg_output/t5-base-squad-qag/best_model" -e "lmqg_output/t5-base-squad-qag/best_model/eval" --language "en" -d "lmqg/qag_squad" -i "paragraph" -o 'questions_answers' --max-length-output 256 --max-length 256
+#lmqg-push-to-hf -m "lmqg_output/t5-base-squad-qag/best_model" -a "t5-base-squad-qag" -o "lmqg"
+
+
+
+
+
+
