@@ -1,0 +1,8 @@
+answer"to reflect their distinct brand identities"
+paragraph_question"question: Why did The Sunday Times and The Times launch separate websites in 2010?, context: The Sunday Times has its own website. It previously shared an online presence with The Times, but in May 2010 they both launched their own sites to reflect their distinct brand identities. Since July 2010, the sites have charged for access."
+question"Why did The Sunday Times and The Times launch separate websites in 2010?"
+sentence"It previously shared an online presence with The Times, but in May 2010 they both launched their own sites to reflect their distinct brand identities ."
+paragraph"The Sunday Times has its own website. It previously shared an online presence with The Times, but in May 2010 they both launched their own sites to reflect their distinct brand identities. Since July 2010, the sites have charged for access."
+sentence_answer"It previously shared an online presence with The Times, but in May 2010 they both launched their own sites <hl> to reflect their distinct brand identities <hl> ."
+paragraph_answer"The Sunday Times has its own website. It previously shared an online presence with The Times, but in May 2010 they both launched their own sites <hl> to reflect their distinct brand identities <hl>. Since July 2010, the sites have charged for access."
+paragraph_sentence"The Sunday Times has its own website. <hl> It previously shared an online presence with The Times, but in May 2010 they both launched their own sites to reflect their distinct brand identities . <hl> Since July 2010, the sites have charged for access."
